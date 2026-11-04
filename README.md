@@ -79,7 +79,22 @@ public/
 
 A geração é local e determinística: não chama nenhum modelo externo. O app infere o ângulo pelo título/tags, escolhe blocos da biblioteca do nicho e distribui o tempo conforme a duração alvo. A humanização aplica regras de reescrita (remove clichês, travessões e frases infladas). Tudo pode ser editado bloco por bloco, reaproveitado em outro item ou mesclado com outra referência.
 
-O pacote exportado em Markdown traz título, alternativas, roteiro com tempos, descrição, tags, thumbnail, referências e checklist. A publicação continua manual.
+O pacote exportado em Markdown traz título, alternativas, roteiro com tempos, descrição, tags, thumbnail, referências e checklist.
+
+## Publicação (padrão manual)
+
+O app prepara o pacote; o upload é feito pelo usuário, manualmente, plataforma por plataforma. Padrão de preenchimento:
+
+| Campo | Padrão |
+|---|---|
+| **Título** | Use o vencedor do pacote (`## Títulos`), respeitando 60 caracteres (desktop) / 40 (mobile). Não repita o título no thumbnail. |
+| **Descrição** | Cole o texto de `## Descrição` do pacote. Inclua capítulos com tempos e as referências usadas. Não invente receita, RPM ou visualizações. |
+| **Tags** | Use as tags de `## Tags` do pacote, separadas por vírgula. Máximo de tags úteis; não encha com palavras irrelevantes. |
+| **Categoria** | Jogos (ou a categoria equivalente na plataforma de destino). |
+| **Visibilidade** | **Não listado** até revisar. Só mude para Público após confirmar que o roteório, thumbnail e descrição estão alinhados com o pacote aprovado. |
+| **Thumbnail** | Até 3 palavras, nunca repete o título, número/nome/data batem qualquer adjetivo. Contraste alto para feed pequeno. |
+
+A publicação continua manual: o app não faz upload automático para nenhuma plataforma.
 
 ## Empacotamento (yt-package + yt-viral)
 
