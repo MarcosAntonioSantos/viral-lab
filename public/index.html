@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Viral Lab — Central de estudo e replicação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff2e88'/%3E%3Cpath d='M9 22V10l7 8 7-8v12' stroke='%23100' stroke-width='2.4' fill='none'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12 20 6"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-channels" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></symbol>
+  <symbol id="i-kanban" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.2"/><rect x="10" y="4" width="5" height="10" rx="1.2"/><rect x="17" y="4" width="4" height="13" rx="1.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></symbol>
+  <symbol id="i-network" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.6"/><circle cx="5" cy="19" r="2.6"/><circle cx="19" cy="19" r="2.6"/><path d="M12 7.6v4M10.7 13.2 6.4 16.8M13.3 13.2l4.3 3.6"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v5a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19V6.5A1.5 1.5 0 0 1 5 5h5"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8V4Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12.5 5 5L20 6.5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 8l5-5 5 5M4 21h16"/></symbol>
+  <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+  <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4.5"/><path d="m11.5 11.5 9 9M17 17l2-2M20 20l2-2"/></symbol>
+  <symbol id="i-script" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 16h6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></symbol>
+  <symbol id="i-merge" viewBox="0 0 24 24"><path d="M4 5v4a5 5 0 0 0 5 5h6"/><path d="M18 3v6M15 6l3 3 3-3"/><path d="M4 19v-4a5 5 0 0 1 5-5h6"/></symbol>
+</svg>
+
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="#/radar">
+    <span class="brand-mark">V</span>
+    <span class="brand-text"><strong>Viral Lab</strong><small>estúdio de replicação</small></span>
+  </a>
+
+  <nav class="nav" aria-label="Navegação principal">
+    <span class="nav-group">Inteligência</span>
+    <a href="#/radar" data-route="radar"><svg class="ico"><use href="#i-radar"/></svg>Radar de virais</a>
+    <a href="#/canais" data-route="canais"><svg class="ico"><use href="#i-channels"/></svg>Canais</a>
+    <a href="#/formatos" data-route="formatos"><svg class="ico"><use href="#i-layers"/></svg>Formatos</a>
+    <span class="nav-group">Produção</span>
+    <a href="#/roteiros" data-route="roteiros"><svg class="ico"><use href="#i-script"/></svg>Estúdio de roteiro</a>
+    <a href="#/pipeline" data-route="pipeline"><svg class="ico"><use href="#i-kanban"/></svg>Pipeline</a>
+    <a href="#/calendario" data-route="calendario"><svg class="ico"><use href="#i-calendar"/></svg>Calendário</a>
+    <span class="nav-group">Rede</span>
+    <a href="#/plataformas" data-route="plataformas"><svg class="ico"><use href="#i-network"/></svg>Plataformas</a>
+    <a href="#/idiomas" data-route="idiomas"><svg class="ico"><use href="#i-globe"/></svg>Idiomas</a>
+    <span class="nav-group">Sistema</span>
+    <a href="#/metodo" data-route="metodo"><svg class="ico"><use href="#i-compass"/></svg>Método</a>
+    <a href="#/config" data-route="config"><svg class="ico"><use href="#i-sliders"/></svg>Configurações</a>
+  </nav>
+
+  <div class="side-foot">
+    <div class="quota-note">
+      <svg class="ico"><use href="#i-bolt"/></svg>
+      <span><strong id="sideQuota">0</strong> unidades / atualização</span>
+    </div>
+    <p>Dados salvos neste navegador.</p>
+  </div>
+</aside>
+
+<div class="shell">
+  <header class="topbar">
+    <button class="btn-icon nav-toggle" id="navToggle" aria-label="Menu"><svg class="ico"><use href="#i-menu"/></svg></button>
+
+    <label class="niche-pick">
+      <span>Nicho</span>
+      <select id="nichePick" aria-label="Nicho ativo"></select>
+    </label>
+
+    <div class="global-search">
+      <svg class="ico"><use href="#i-search"/></svg>
+      <input id="globalSearch" type="search" placeholder="Filtrar títulos, canais…" autocomplete="off">
+    </div>
+
+    <div class="top-actions">
+      <span class="conn" id="connStatus"><i></i><span>sem chave</span></span>
+      <button class="btn btn-primary" id="newItem"><svg class="ico"><use href="#i-plus"/></svg>Novo item</button>
+    </div>
+  </header>
+
+  <main id="view" class="page"></main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div id="toastRoot" class="toasts" aria-live="polite"></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

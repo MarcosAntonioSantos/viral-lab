@@ -1,0 +1,14 @@
+{
+  "name": "viral-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Central de estudo de mercado, formatos e distribuição multiplataforma",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
