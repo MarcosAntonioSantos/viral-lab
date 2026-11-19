@@ -74,6 +74,8 @@ export function openItemEditor(ctx, item = null, prefill = {}) {
       languages: state.languages.filter((l) => l.active).map((l) => l.code),
       hook: '',
       script: '',
+      clipFile: '',
+      clipStatus: 'planejado',
       due: '',
       publishAt: '',
       notes: '',
@@ -196,6 +198,15 @@ export function openItemEditor(ctx, item = null, prefill = {}) {
             }).join('')}
           </select>
         </div>
+        <div class="field" style="margin-top:10px"><label>Clipe cortado (EDL)</label>
+          <div class="form-row" style="margin-top:6px">
+            <div class="field"><input class="input" id="it_clipFile" type="file" accept="video/*"></div>
+            <div class="field" style="width:1px"><button type="button" class="btn btn-sm" id="it_clipImport"><svg class="ico"><use href="#i-upload"/></svg>Importar clipe</button></div>
+          </div>
+          <div id="it_clipStatus" style="margin-top:6px;font-size:11px;color:var(--dim)">
+            ${base.clipStatus === 'cortado' ? `✓ Clipe importado: ${ui.esc(base.clipFile || 'arquivo cortado')}` : `Status: <b style="color:var(--pink)">planejado</b> — aguardando clipe cortado`}
+          </div>
+        </div>
         <div class="script-stats" id="it_stats">${statsHtml()}</div>
         <div class="field"><label>Referências do roteiro</label>
           <div class="source-list" id="it_sources">${sourceChips()}</div>
@@ -305,6 +316,8 @@ export function openItemEditor(ctx, item = null, prefill = {}) {
         languages: [...dialog.querySelectorAll('input[name="it_lang"]:checked')].map((i) => i.value),
         beats,
         sources,
+        clipFile: dialog.querySelector('#it_clipFile')?.value || '',
+        clipStatus: dialog.querySelector('#it_clipFile')?.value ? 'cortado' : base.clipStatus,
         tags: dialog.querySelector('#it_tags').value,
         description: dialog.querySelector('#it_desc').value,
         thumbnail: dialog.querySelector('#it_thumb').value,
@@ -462,6 +475,32 @@ export function openItemEditor(ctx, item = null, prefill = {}) {
         renderBeats();
         ui.toast('Bloco inserido');
       });
+
+      const clipInput = dialog.querySelector('#it_clipFile');
+      const clipStatusEl = dialog.querySelector('#it_clipStatus');
+      const refreshClipStatus = () => {
+        if (clipInput?.value) {
+          const name = clipInput.value.split(/[\\/]/).pop();
+          clipStatusEl.innerHTML = `✓ Clipe selecionado: ${ui.esc(name)}`;
+          clipStatusEl.style.color = 'var(--ok)';
+        } else if (base.clipFile) {
+          clipStatusEl.innerHTML = `✓ Clipe importado: ${ui.esc(base.clipFile.split(/[\\/]/).pop())}`;
+          clipStatusEl.style.color = 'var(--ok)';
+        } else {
+          clipStatusEl.innerHTML = 'Status: <b style="color:var(--pink)">planejado</b> — aguardando clipe cortado';
+          clipStatusEl.style.color = 'var(--dim)';
+        }
+      };
+      clipInput?.addEventListener('change', refreshClipStatus);
+      dialog.querySelector('#it_clipImport')?.addEventListener('click', () => {
+        if (!clipInput?.value) return ui.toast('Selecione o arquivo de vídeo cortado primeiro.', 'error');
+        const name = clipInput.value.split(/[\\/]/).pop();
+        base.clipFile = name;
+        base.clipStatus = 'cortado';
+        refreshClipStatus();
+        ui.toast('Clipe marcado como cortado — salve o item');
+      });
+      refreshClipStatus();
 
       dialog.querySelector('#it_copy').addEventListener('click', () => {
         if (!beats.length) return ui.toast('Nada para copiar ainda.', 'error');
