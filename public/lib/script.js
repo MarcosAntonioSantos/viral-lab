@@ -331,17 +331,22 @@ const WB = '(?<![\\p{L}\\p{N}_])';
 const WA = '(?![\\p{L}\\p{N}_])';
 
 const AI_TELLS = [
+  // §1 / §3 / §27 — Staging, sayings that sound deep, negative parallelism
   [/(é importante (?:ressaltar|destacar|notar)|vale (?:ressaltar|destacar|notar|lembrar)) que\s*(isso\s+)?/gi, ''],
+  [/(a (?:verdadeira|real) questão é|o que realmente importa|no cerne|no fundo|o coração da questão)/gi, ''],
   [new RegExp(`${WB}(não é (?:apenas|só|somente)) ([^,.!?]+), (?:é|mas sim) ([^.!?]+)`, 'gi'), '$2 importa, mas o ponto é $3'],
+  // §4 — Staged run-up before the point (engole o artigo/preposição que segue)
+  [new RegExp(`${WB}(no vídeo de hoje|neste vídeo|hoje eu vou|hoje vamos|vamos mergulhar|vamos falar|vamos ver|aqui está o que você precisa saber|sem mais delongas|olha só|vamos lá)\\b\\s*(?:no|na|nas|nos|de|do|da|dos|das|que|e|:)?\\s*`, 'gi'), ''],
+  // §5 — Arguing with no one (engole o "que" que segue)
+  [new RegExp(`${WB}(não estou dizendo|não estou dizendo que|para ser claro|não se engane|alguns podem dizer|você pode pensar|tentador seria)\\b\\s*(?:que\\s+)?`, 'gi'), ''],
+  // §2 — One-line closers / dramatic fragments
+  [/(isso é o que realmente importa|isso mostra a importância|leia disso|isso é o ponto|deixa isso entrar|ganhou|venceu|real win|destaque importante)/gi, ''],
+  // Connectors (português)
   [new RegExp(`${WB}(além disso|ademais|outrossim|dessa forma|desse modo|por conseguinte),?\\s*`, 'gi'), 'E '],
   [/\b(no entanto|entretanto|contudo),?\s*/gi, 'Mas '],
   [/\b(portanto|assim sendo|logo),?\s*/gi, 'Então '],
   [/\b(em suma|em conclusão|por fim|para concluir|por último),?\s*/gi, ''],
-  [/\b(no vídeo de hoje|neste vídeo|hoje eu vou|hoje vamos|vamos mergulhar)\b[,:]?\s*/gi, ''],
-  [/\b(incrivelmente|extremamente|absolutamente|simplesmente|realmente|literalmente)\s+/gi, ''],
-  [/\b(revolucion[áa]rio|divisor de [áa]guas|game ?changer)\b/gi, 'diferente'],
-  [/\b(de forma|de maneira) geral\b,?\s*/gi, ''],
-  [/(é fundamental|é essencial|é crucial)\b/gi, 'importa'],
+  // §8 — Dashes as universal connector (replace with comma, not deletion)
   [/\s*—\s*/g, ', '],
   [/\s*–\s*/g, ', '],
   [/\s{2,}/g, ' '],
