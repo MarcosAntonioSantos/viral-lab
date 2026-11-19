@@ -1,4 +1,4 @@
-import { state, save, setFeed, hasApiKey } from '../lib/store.js';
+import { state, save, setFeed, hasApiKey, uid } from '../lib/store.js';
 import { viralScore, viewsPerDay, engagement, daysSince, median } from '../lib/metrics.js';
 import { searchVideos, videosByIds, channelsByIds } from '../lib/api.js';
 import { DEMO_VIDEOS } from '../lib/seed.js';
@@ -263,6 +263,7 @@ export function openVideo(v, ctx) {
         <div class="source-chip" style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin:4px 0;padding:6px 8px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px">
           <span title="${ui.esc(c.title)}">${ui.esc(c.title)}</span>
           <span style="color:var(--dim)">${c.start}s → ${c.end}s (${c.duration}s) · ${c.status}</span>
+          <button class="btn-icon" data-clip-pipe="${c.id}" title="Enviar ao pipeline"><svg class="ico"><use href="#i-plus"/></svg></button>
           <button class="btn-icon" data-clip-del="${c.id}" title="Remover"><svg class="ico"><use href="#i-x"/></svg></button>
         </div>`).join('');
       list.querySelectorAll('[data-clip-del]').forEach((btn) => {
@@ -271,6 +272,50 @@ export function openVideo(v, ctx) {
           save();
           renderClipList();
           ui.toast('Clipe removido');
+        });
+      });
+
+      list.querySelectorAll('[data-clip-pipe]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const c = state.clips.find((x) => x.id === btn.dataset.clipPipe);
+          if (!c) return;
+          const activeLangCodes = state.languages.filter((l) => l.active).map((l) => l.code);
+          const item = {
+            id: uid('pl'),
+            nicheId: ctx.niche.id,
+            title: c.title,
+            formatId: '',
+            stage: 'ideia',
+            platforms: c.platforms || ['shorts', 'tiktok', 'reels'],
+            languages: activeLangCodes.slice(0, 3),
+            hook: '',
+            script: '',
+            beats: [],
+            titleOptions: [c.title],
+            description: '',
+            tags: c.angle,
+            thumbnail: '',
+            angle: c.angle,
+            duration: c.duration,
+            sources: [{
+              ...sourceFromVideo(v),
+              clipId: c.id,
+              start: c.start,
+              end: c.end,
+            }],
+            checks: [],
+            due: '',
+            publishAt: '',
+            notes: `Clipe ${c.start}s→${c.end}s de ${ui.esc(v.title)}`,
+            sourceClip: c.id,
+            sourceVideoId: v.id,
+            createdAt: new Date().toISOString(),
+          };
+          state.pipeline.push(item);
+          c.status = 'pipeline';
+          save();
+          renderClipList();
+          ui.toast('Clipe enviado ao pipeline');
         });
       });
     };
