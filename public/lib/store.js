@@ -22,6 +22,7 @@ function hydrate(saved) {
     blocks: Array.isArray(saved.blocks) ? saved.blocks : base.blocks,
     platforms: Array.isArray(saved.platforms) && saved.platforms.length ? saved.platforms : base.platforms,
     languages: Array.isArray(saved.languages) && saved.languages.length ? saved.languages : base.languages,
+    clips: Array.isArray(saved.clips) ? saved.clips : [],
     channels: Array.isArray(saved.channels) ? saved.channels : [],
     pipeline: Array.isArray(saved.pipeline) ? saved.pipeline : [],
     feeds: saved.feeds && typeof saved.feeds === 'object' ? saved.feeds : {},

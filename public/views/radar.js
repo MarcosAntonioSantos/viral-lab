@@ -4,7 +4,7 @@ import { searchVideos, videosByIds, channelsByIds } from '../lib/api.js';
 import { DEMO_VIDEOS } from '../lib/seed.js';
 import {
   buildScript, inferAngle, topicOf, clip, sourceFromVideo, suggestFor, stats,
-  ANGLES, durationLabel, scriptText,
+  ANGLES, durationLabel, scriptText, clipSegment,
 } from '../lib/script.js';
 import { beatsPreview, openMergeDialog } from '../lib/script-ui.js';
 import { createItemsFromVideos, createItemFromScript } from '../lib/autopilot.js';
@@ -167,10 +167,29 @@ export function openVideo(v, ctx) {
       <div class="field"><label for="vf_notes">Observações de produção</label>
         <textarea class="textarea" id="vf_notes" style="min-height:64px" placeholder="Materiais, fontes, cuidados com direitos…"></textarea>
       </div>
+      <div class="field"><label>Corte vertical (clipe)</label>
+        <div class="form-row">
+          <div class="field"><label for="vf_clipStart">Início (s)</label>
+            <input class="input" id="vf_clipStart" type="number" min="0" step="1" value="0">
+          </div>
+          <div class="field"><label for="vf_clipEnd">Fim (s)</label>
+            <input class="input" id="vf_clipEnd" type="number" min="1" step="1" value="${Math.min(60, v.duration || 60)}">
+          </div>
+        </div>
+        <div class="field"><label for="vf_clipTitle">Título do clipe</label>
+          <input class="input" id="vf_clipTitle" value="${ui.esc(topicOf(v.title))}">
+        </div>
+        <div class="check-grid" style="margin-top:8px">
+          ${platforms.filter((p) => ['shorts','tiktok','reels'].includes(p.id)).map((p) => `<label class="check"><input type="checkbox" name="vf_clipPlat" value="${p.id}" checked>${ui.esc(p.name)}</label>`).join('')}
+        </div>
+        <div id="vf_clipList" style="margin-top:10px"></div>
+        <button type="button" class="btn btn-sm" id="vf_exportEdl" style="margin-top:8px"><svg class="ico"><use href="#i-download"/></svg>Exportar cortes (EDL)</button>
+      </div>
       <div class="form-actions">
         <button type="button" class="btn" id="vf_copy"><svg class="ico"><use href="#i-copy"/></svg>Copiar roteiro</button>
         <button type="button" class="btn" id="vf_saveFormat">Salvar como formato</button>
         <button type="button" class="btn btn-primary" id="vf_savePipe">Criar no pipeline</button>
+        <button type="button" class="btn" id="vf_markClip"><svg class="ico"><use href="#i-spark"/></svg>Marcar clipe</button>
       </div>
     </form>`;
 
@@ -235,6 +254,69 @@ export function openVideo(v, ctx) {
       ui.toast('Roteiro criado no pipeline');
       ctx.refresh();
     });
+
+    const renderClipList = () => {
+      const mine = state.clips.filter((c) => c.sourceId === v.id);
+      const list = dialog.querySelector('#vf_clipList');
+      if (!list) return;
+      list.innerHTML = mine.map((c) => `
+        <div class="source-chip" style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin:4px 0;padding:6px 8px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px">
+          <span title="${ui.esc(c.title)}">${ui.esc(c.title)}</span>
+          <span style="color:var(--dim)">${c.start}s → ${c.end}s (${c.duration}s) · ${c.status}</span>
+          <button class="btn-icon" data-clip-del="${c.id}" title="Remover"><svg class="ico"><use href="#i-x"/></svg></button>
+        </div>`).join('');
+      list.querySelectorAll('[data-clip-del]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.clips = state.clips.filter((c) => c.id !== btn.dataset.clipDel);
+          save();
+          renderClipList();
+          ui.toast('Clipe removido');
+        });
+      });
+    };
+
+    dialog.querySelector('#vf_markClip').addEventListener('click', () => {
+      const start = Number(dialog.querySelector('#vf_clipStart').value) || 0;
+      const end = Number(dialog.querySelector('#vf_clipEnd').value) || start + 60;
+      if (end <= start) return ui.toast('O fim deve ser maior que o início.', 'error');
+      const title = dialog.querySelector('#vf_clipTitle').value.trim() || topicOf(v.title);
+      const platChecked = [...dialog.querySelectorAll('input[name="vf_clipPlat"]:checked')].map((i) => i.value);
+      const clip = clipSegment(v, start, end, {
+        title,
+        angle: dialog.querySelector('#vf_angle').value,
+        sourceTitle: v.title,
+      });
+      clip.platforms = platChecked;
+      state.clips.push(clip);
+      save();
+      renderClipList();
+      dialog.querySelector('#vf_clipTitle').value = '';
+      ui.toast('Clipe marcado para corte');
+    });
+
+    dialog.querySelector('#vf_exportEdl').addEventListener('click', () => {
+      const mine = state.clips.filter((c) => c.sourceId === v.id);
+      if (!mine.length) return ui.toast('Nenhum clipe marcado para este vídeo.', 'error');
+      const edl = mine.map((c) => ({
+        source: c.sourceTitle,
+        channel: c.sourceChannel,
+        start: c.start,
+        end: c.end,
+        title: c.title,
+        angle: c.angle,
+        platforms: c.platforms || [],
+      }));
+      const blob = new Blob([JSON.stringify(edl, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cortes_${v.id}_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      ui.toast(`${mine.length} corte(s) exportado(s) para EDL`);
+    });
+
+    renderClipList();
   } });
   return d;
 }

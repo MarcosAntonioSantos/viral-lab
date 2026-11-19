@@ -472,6 +472,34 @@ function medianOf(nums) {
   return s.length % 2 === 0 ? (s[m - 1] + s[m]) / 2 : s[m];
 }
 
+// ── Segmento de corte (clipe vertical) ─────────────────────────────────────
+// Gera o EDL (edit decision list) que o gtavi-claudecode / ffmpeg consome.
+// Não executa corte no navegador: apenas registra o que deve ser cortado.
+export function clipSegment(video, startSec, endSec, { title, angle, sourceTitle } = {}) {
+  const start = Math.max(0, Math.floor(Number(startSec || 0)));
+  const end = Math.max(start + 1, Math.floor(Number(endSec || start + 60)));
+  return {
+    id: uid('clip'),
+    sourceId: video.id || video.videoId || '',
+    sourceTitle: sourceTitle || video.title || video.name || '',
+    sourceChannel: video.channel || video.channelTitle || '',
+    start,
+    end,
+    duration: end - start,
+    title: title || clipTitle(video, start, end),
+    angle: angle || inferAngle(video),
+    status: 'planejado', // planejado | cortado | revisando | publicado
+    createdAt: Date.now(),
+  };
+}
+
+function clipTitle(video, start, end) {
+  const t = topicOf(video.title || '');
+  const m = Math.floor(start / 60);
+  const s = start % 60;
+  return `${t} — corte ${m}:${String(s).padStart(2, '0')}`;
+}
+
 export function findOutliers(videos = [], multiple = YT_PACK.outlierMultiple) {
   const byChannel = {};
   videos.forEach((v) => {
